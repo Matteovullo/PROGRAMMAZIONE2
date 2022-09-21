@@ -22,11 +22,10 @@ class StaticQueue {
 	}
 
 	T getFirst(){
-
-		if(isEmpty())
+		if(size == 0)
 			return nullptr;
 		
-		return vet[head];
+		return array[head];
 	}
 	
 	void enqueue(T val) {

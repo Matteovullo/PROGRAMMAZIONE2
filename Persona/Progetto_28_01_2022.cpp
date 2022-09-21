@@ -1,7 +1,8 @@
 #include<iostream>
 using namespace std;
 
-#include "bst.h"
+#include "static_queue.h"
+#include "static_stack.h"
 
 class Persona{
     private:
@@ -61,9 +62,9 @@ int main(){
     }
 
     //punto 2
-    BST<Persona*> bst;
-    for(int i=0; i<n; i++){
-        bst.insert(array[i]);
+    StaticQueue<double> coda(1000);
+    for(int i=0; i=2*n; i++){
+        coda.enqueue()
     }
 
     //punto 3
@@ -73,10 +74,7 @@ int main(){
     int valore;
     cout << "Inserire il valore: " << endl;
     cin >> valore;
-    BSTNode<Persona*> *ptr=bst.getRoot();
-    while(ptr){
-        if(ptr->getKey() == valore){
-            
-        }
+    for(int i=0; i<n; i++){
+        double a=
     }
 }

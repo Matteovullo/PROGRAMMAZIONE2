@@ -99,17 +99,5 @@ int main(){
         ptr->setOpSinistro(a);
     	ptr->setOpDestro(b);
     	cout << ptr->eseguiCalcolo() << endl;
-         /*if(typeid(ptr)==typeid(Addizione)){
-            cout << dynamic_cast<Addizione*>(ptr)->eseguiCalcolo() << endl;
-        }
-        if(typeid(ptr)==typeid(Sottrazione)){
-            cout << dynamic_cast<Sottrazione*>(ptr)->eseguiCalcolo() << endl;
-        }
-        if(typeid(ptr)==typeid(Moltiplicazione)){
-            cout << dynamic_cast<Moltiplicazione*>(ptr)->eseguiCalcolo() << endl;
-        }
-        if(typeid(ptr)==typeid(Divisione)){
-            cout << dynamic_cast<Divisione*>(ptr)->eseguiCalcolo() << endl;
-        }*/
     }
 }

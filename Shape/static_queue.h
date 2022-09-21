@@ -20,13 +20,17 @@ class StaticQueue {
 	StaticQueue(int maxSize = MAX_SIZE) :  maxSize(maxSize) {
 		this->array = new T[maxSize];
 	}
+	
+	bool isEmpty(){
+		return size == 0;
+	}
 
 	T getFirst(){
 
 		if(isEmpty())
 			return nullptr;
 		
-		return vet[head];
+		return array[head];
 	}
 	
 	void enqueue(T val) {
