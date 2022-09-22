@@ -30,7 +30,7 @@ class Bst{
                 ptr->right=new BSTNode<T>(val);
                 ptr->right->parent=ptr;
                 return;
-            }else if(val < ptr->val){
+            }else if(val < ptr->key){
                 insert(ptr->left, val);
             }else{
                 insert(ptr->right, val);

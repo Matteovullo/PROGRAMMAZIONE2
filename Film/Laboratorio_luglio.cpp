@@ -13,19 +13,18 @@ int main(){
         Film f;
         file >> f;
         cout << f;
-        l.insert(f);
+        l.insertTail(f);
     }
-    cout << endl;
+    cout << endl << endl << endl << endl << endl << endl;
 
     cout << l << endl;
 
     Bst<Film> bst;
     for(int i=0; i<1002; i++){
-        Film f=l.getHead();
+        Film f=l.get_head();
         bst.insert(f);
-        l.remove();
+        l.removeHead();
     }
 
-    
     cout << bst << endl;
 }

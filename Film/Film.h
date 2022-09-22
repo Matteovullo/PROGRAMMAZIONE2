@@ -3,6 +3,7 @@
 
 #include<iostream>
 using namespace std;
+#include "List.h"
 
 class Film{
     private:
@@ -24,10 +25,23 @@ class Film{
             f.valutazione=atof(v.c_str());
             return imput;
         }
+        bool operator<(Film f){
+            return valutazione < f.valutazione;
+        }
+        bool operator>=(Film f){
+            return valutazione >= f.valutazione;
+        }
+        bool operator==(Film f){
+            return valutazione==f.valutazione;
+        }
+        bool operator!=(Film f){
+            return valutazione!=f.valutazione;
+        }
         friend ostream& operator<<(ostream& os, Film& f){
             os << f.titolo << ";" << f.anno << ";" << f.valutazione << endl;
             return os;
         }
+        friend class Node;
 };
 
 #endif

@@ -16,7 +16,7 @@ class BSTNode{
     friend class Bst;
 
     public:
-        BSTNode() : left(nullptr), right(nullptr), parent(nullptr){}
+        BSTNode(T key) : left(nullptr), right(nullptr), parent(nullptr), key(key){}
         friend ostream& operator<<(ostream& os, BSTNode<T>& n){
             os << "Key = " << n.key << ", figlio destro=" << n.right << ", figlio sinistro = " << n.left << ", genitore = " << n.parent << endl;
             return os;

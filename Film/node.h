@@ -10,15 +10,19 @@ class Node{
     private:
         Film f;
         Node* next;
-
-    friend class List;
         
     public:
         Node(Film f) : f(f), next(nullptr){}
+        Film getFilm(){return f;}
+        Node* get_next(){
+
+			return this->next;
+		}
         friend ostream& operator<<(ostream& os, Node& n){
             os << n.f << endl;
             return os;
         }
+        friend class List;
 };
 
 #endif
