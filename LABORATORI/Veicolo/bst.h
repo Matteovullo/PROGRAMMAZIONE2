@@ -222,15 +222,15 @@ class BST {
 	}
 
 		void cancel_below(BSTNode<T>* ptr, int cilindrata){
-	        if(ptr->key->getCilindrata() < cilindrata){
-	            remove(ptr->key);
+	        if(ptr && ptr->getKey()->getCilindrata() < cilindrata){
+	            remove(ptr->getKey());
 			}
 	    }
 		
 	    void remove_below(BSTNode<T>* ptr, int cilindrata){
 	        if(!ptr) return;
-	        remove_below(ptr->right, cilindrata);
 	        cancel_below(ptr, cilindrata);
+	        remove_below(ptr->right, cilindrata);
 	        remove_below(ptr->left, cilindrata);
 	    }
 
