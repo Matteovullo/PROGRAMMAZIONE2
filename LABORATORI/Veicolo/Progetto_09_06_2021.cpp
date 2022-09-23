@@ -79,21 +79,18 @@ int main(){
 	}
 	
 	//punto 2
-	StaticStack<Auto> a(1000);
+	StaticStack<Auto*> a(1000);
 	StaticStack<Moto*> m(1000);
 	StaticStack<Barca*> b(1000);
 	for(int i=0; i<n; i++){
-		if(typeid(*array[i])==typeid(Auto)){
-			Auto* ptr=dynamic_cast<Auto*>(array[i]);
-			a.push(*ptr);
-		}
+		if(typeid(*array[i])==typeid(Auto)) a.push(dynamic_cast<Auto*>(array[i]));
 		if(typeid(*array[i])==typeid(Moto)) m.push(dynamic_cast<Moto*>(array[i]));
 		if(typeid(*array[i])==typeid(Barca)) b.push(dynamic_cast<Barca*>(array[i]));
 	}
 	cout << a << endl;
 	cout << m << endl;
 	cout << b << endl;
-	/*
+
 	//punto 3
 	BST<Auto*> bst_a;
 	BST<Moto*> bst_m;
@@ -111,10 +108,9 @@ int main(){
 	//cout << bst_a << endl;
 	//cout << bst_m << endl;
 	//cout << bst_b << endl;
-	int c=2000;
+	int c=1000;
 	//cout << "Inserire una cilindrata: " << endl;
 	bst_a.remove_below(c);
 	bst_m.remove_below(c);
 	bst_b.remove_below(c);
-	*/
 }
