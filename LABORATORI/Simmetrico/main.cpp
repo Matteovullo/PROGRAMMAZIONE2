@@ -1,19 +1,23 @@
-#include <iostream>
+#include<iostream>
 using namespace std;
 
-#include "bst.h"
+#include "BST2.h"
 
 int main(){
-    BST<int> bst;
-    bst.insert(10);
-    bst.insert(11);
-    bst.insert(4);
-    bst.insert(30);
+	
+	BST<int> o;
 
-    cout << bst << endl;
+	o.insert(7);
+	o.insert(2);
+	o.insert(4);
+	o.insert(9);
+	o.insert(12);
 
-    BST<int> simme;
-    bst.simmetrico(simme);
+	cout << "\nBST originale: " << endl << "-------------------------" << endl;
+	o.in_order();
+	cout << endl;
 
-    cout << simme << endl;
+	cout << "\nBST simmetrico: " << endl << "-------------------------" << endl;
+	o.symmetric()->in_order();
+	cout << endl;
 }

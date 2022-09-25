@@ -2,11 +2,14 @@
 #define BST_H
 
 #include "bst_node.h"
+#include "dllist.h"
+#include "queue.h"
 #include <iostream>
 
 template<typename T>
 class BST {
 	BSTNode<T>* root;
+	Queue<T> nodes;
 	
 	public:
 		
@@ -278,41 +281,98 @@ class BST {
 			change_root(bst);
 			return bst;
 		}*/
-
-		void insert_change(BSTNode<T>* ptr, BST<T>& bst){
-			T key=ptr->getKey();
-				if(ptr->right == nullptr && key <= ptr->key) {
-					bst.ptr->right = ptr;
-					bst.ptr->right->setParent(ptr);
+		/*
+		void setRight(BSTNode<T>* ptr){
+			ptr->setRight(ptr);
+		}
+		void setLeft(BSTNode<T>* ptr){
+			ptr->setLeft(ptr);
+		}
+		void setParent(BSTNode<T>* ptr){
+			ptr->setParent(ptr);
+		}
+		BSTNode<T>* getRight(BSTNode<T>* ptr){
+			return ptr->getRight();
+		}
+		BSTNode<T>* getLeft(BSTNode<T>* ptr){
+			return ptr->getLeft();
+		}
+		void insert_change(BSTNode<T>* ptr, BSTNode<T>* p, BST<T>& bst){
+			if(!ptr) return;
+				if(p->right == nullptr && ptr->getKey() <= p->getKey()) {
+					bst.setRight(ptr);
+					bst.setParent(ptr);
 					return;
 				}
-				if(ptr->left == nullptr && key > bst.ptr->key) {
-					bst.ptr->left = ptr;
-					bst.ptr->left->parent = ptr;
-				return;
+				if(p->left == nullptr && ptr->getKey() > p->getKey()) {
+					bst.setLeft(ptr);
+					bst.setParent(ptr);
+					return;
 				}
-				else if(key <= bst.ptr->key)
-					insert(bst.right, key);
+				else if(ptr->getKey() <= p->getKey())
+					insert_change(bst.getRight(ptr), p, bst);
 				else
-					insert(bst.left, key);		
+					insert_change(bst.getLeft(ptr), p,  bst);		
 		}
 		
-		void change(BSTNode<T>* ptr, BST<T>& bst){
+		void change(BSTNode<T>* ptr, BSTNode<T>* p, BST<T>& bst){
 			if(ptr == nullptr)
 				return;
 			
 			bst.root=getRoot();
+			p=ptr;
 			if(ptr != root){
-				insert_change(ptr, bst);
+				insert_change(ptr, p, bst);
 			}
-			change(ptr->left, bst);
-			change(ptr->right, bst);
+			change(ptr->left, p->left, bst);
+			change(ptr->right, p->right, bst);
 		}
 		
 		BST<T> change_bst(BST<T>& bst) {
-			change(root);
+			change(root, bst.root, bst);
 			return bst;
-		}		
+		}*/	
+
+		void insert_symmetric(T key){
+			if(isEmpty())
+			{
+				root = new BSTNode<T>(key);
+				return;
+			}
+			insert_symmetric(root, key);
+		}
+		void insert_symmetric(BSTNode<T>* ptr, T key){
+			if(!ptr->left && key > ptr->key)
+			{
+				ptr->left = new BSTNode<T>(key);
+				ptr->left->setParent(ptr);
+				return;
+			}
+			if(!ptr->right && key <= ptr->key)
+			{
+				ptr->right = new BSTNode<T>(key);
+				ptr->right->setParent(ptr);
+				return;
+			}
+			if(key > ptr->key)
+				insert_symmetric(ptr->left, key);
+			else if(key <= ptr->key)
+				insert_symmetric(ptr->right, key);
+		}
+		BST<T>* symmetric(){
+			BST<T>* toreturn = new BST<T>;
+			if(nodes.isEmpty())
+				throw out_of_range("..symmetric fail! Empty BST!..");
+
+			DLNode<T>* ptr  = nodes->getHead();
+			while(ptr)
+			{
+				toreturn->insert_symmetric(ptr->getVal());
+				ptr = ptr->getNext();
+			}
+
+			return toreturn;
+		}
 
 		friend ostream& operator<< (ostream& os, BST<T>& bst){
 

@@ -1,69 +1,38 @@
-
 #ifndef BST_NODE_H
 #define BST_NODE_H
 
-#include <iostream>
-
 template<typename T>
-class BSTNode {
-	protected:
-	
+class BSTNode{
 	T key;
-	BSTNode<T>* left;
-	BSTNode<T>* right;
 	BSTNode<T>* parent;
-	bool verbose = false;
-	
-	template<typename U>
+	BSTNode<T>* right;
+	BSTNode<T>* left;
+
+	template<typename C>
 	friend class BST;
-	
-	public: 
-	
-	BSTNode(T key, bool verbose=true) : key(key), verbose(verbose) {
-		left = nullptr;
-		right = nullptr;
+
+public:
+
+	BSTNode(T key) : key(key){
 		parent = nullptr;
+		right = nullptr;
+		left = nullptr;
 	}
+
+	//Getter
+	BSTNode<T>* getParent(){return this->parent;}
+	BSTNode<T>* getRight(){return this->right;}
+	BSTNode<T>* getLeft(){return this->left;}
+	T getKey(){return this->key;}
+
+	//Setter
+	void setParent(BSTNode<T>* parent){this->parent = parent;}
+	void setRight(BSTNode<T>* right){this->right = right;}
+	void setLeft(BSTNode<T>* left){this->left = left;}
+	void setKey(T key){this->key = key;}
+
+	friend ostream& operator<< (ostream& os, const BSTNode<T>& b){return os << "\tKey: " << *b.key << endl;}
 	
-	void setLeft(BSTNode<T>* left) {
-		this->left = left;
-	}
-	
-	void setRight(BSTNode<T>* right) {
-		this->right = right;
-	}
-	
-	void setParent(BSTNode<T>* parent) {
-		this->parent = parent;
-	}
-	
-	BSTNode<T>* getLeft() {
-		return this->left;
-	}
-	
-	BSTNode<T>* getRight() {
-		return this->right;
-	}
-	
-	BSTNode<T>* getParent() {
-		return this->parent;
-	}
-	
-	void setKey(T key) {
-		this->key = key;
-	}
-	
-	T getKey() {
-		return this->key;
-	}
-	
-	friend std::ostream& operator<<(std::ostream& out, BSTNode<T>& node) {
-		if(node.verbose)
-			out << "BSTNode@" << &node << " key=" << node.key << " - left=" << node.left << " right=" << node.right << " parent=" << node.parent;
-		else
-			out << "BSTNode key=" << node.key;
-		return out;
-	}
 };
 
 #endif

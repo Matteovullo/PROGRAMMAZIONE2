@@ -1,116 +1,97 @@
 #include <iostream>
 #include <fstream>
+#include <limits>
 using namespace std;
 
+#include "Veicolo.h"
 #include "Static_stack.h"
-#include "BST.h"
-
-class Veicolo{
-	protected:
-		int cilindrata;
-		
-	public:
-		Veicolo(double cilindrata) : cilindrata(cilindrata){}
-		virtual int getCilindrata()=0;
-		virtual ostream& put(ostream& os){
-			os << "Class=" << typeid(*this).name() << ", cilindrata = " << cilindrata << endl;
-			return os;
-		}
-};
-
-ostream& operator<<(ostream& os, Veicolo& obj){
-	return obj.put(os);
-}
-
-class Auto : public Veicolo{
-	public:
-		Auto(double cilindrata) : Veicolo(cilindrata){}
-		int getCilindrata(){return cilindrata;}
-		ostream& put(ostream& os){
-			Veicolo::put(os);
-			return os;
-		}
-};
-
-class Moto : public Veicolo{
-	public:
-		Moto(double cilindrata) : Veicolo(cilindrata){}
-		int getCilindrata(){return cilindrata;}
-		ostream& put(ostream& os){
-			Veicolo::put(os);
-			return os;
-		}
-};
-
-class Barca : public Veicolo{
-	public:
-		Barca(double cilindrata) : Veicolo(cilindrata){}	
-		int getCilindrata(){return cilindrata;}
-		ostream& put(ostream& os){
-			Veicolo::put(os);
-			return os;
-		}
-};
+#include "bst.h"
 
 int main(){
-	//punto 1
-	ifstream file("veicoli.txt");
-	string s;
-	int n=500;
-	Veicolo* array[n];
-	for(int i=0; i<n; i++){
-		string s1="";
-		string s2="";
-		getline(file, s1, ',');
-		getline(file, s2, '\n');
-		if(s1 == "AUTO"){
-			array[i]=new Auto(atoi(s2.c_str()));
+
+	int N = 500;
+	StaticStack<Veicolo*> s_auto(N);
+	StaticStack<Veicolo*> s_moto(N);
+	StaticStack<Veicolo*> s_barca(N);
+
+	ifstream is("Veicoli.txt");
+	string type = "";
+	string cilindrata = "";
+	while(is.good())
+	{
+		Veicolo* v;
+		getline(is, type, ',');
+		getline(is, cilindrata);
+		if(type == "AUTO")
+		{
+			v = new Auto(atoi(cilindrata.c_str()), type);
+			s_auto.push(v);
 		}
-		if(s1 == "MOTO"){
-			array[i]=new Moto(atoi(s2.c_str()));
+		if(type == "MOTO")
+		{
+			v = new Moto(atoi(cilindrata.c_str()), type);
+			s_moto.push(v);
 		}
-		if(s1 == "BARCA"){
-			array[i]=new Barca(atoi(s2.c_str()));
+		if(type == "BARCA")
+		{
+			v = new Barca(atoi(cilindrata.c_str()), type);
+			s_barca.push(v);
 		}
 	}
 
-	for(int i=0; i<n; i++){
-		cout << *array[i] << endl;
-	}
-	
-	//punto 2
-	StaticStack<Auto*> a(1000);
-	StaticStack<Moto*> m(1000);
-	StaticStack<Barca*> b(1000);
-	for(int i=0; i<n; i++){
-		if(typeid(*array[i])==typeid(Auto)) a.push(dynamic_cast<Auto*>(array[i]));
-		if(typeid(*array[i])==typeid(Moto)) m.push(dynamic_cast<Moto*>(array[i]));
-		if(typeid(*array[i])==typeid(Barca)) b.push(dynamic_cast<Barca*>(array[i]));
-	}
-	cout << a << endl;
-	cout << m << endl;
-	cout << b << endl;
+	cout << "Stack di oggetti di tipo Auto" << s_auto << endl;
+	cout << "Stack di oggetti di tipo Moto" << s_moto << endl;
+	cout << "Stack di oggetti di tipo Barca" << s_barca << endl;
 
-	//punto 3
-	BST<Auto*> bst_a;
-	BST<Moto*> bst_m;
-	BST<Barca*> bst_b;
-	for(int i=0; i<n; i++){
-		if(typeid(*array[i])==typeid(Auto)) bst_a.insert(dynamic_cast<Auto*>(array[i]));
-		if(typeid(*array[i])==typeid(Moto)) bst_m.insert(dynamic_cast<Moto*>(array[i]));
-		if(typeid(*array[i])==typeid(Barca)) bst_b.insert(dynamic_cast<Barca*>(array[i]));
-	}
-	cout << bst_a << endl;
-	cout << bst_m << endl;
-	cout << bst_b << endl;
+	BST<Veicolo*> b_auto;
+	BST<Veicolo*> b_moto;
+	BST<Veicolo*> b_barca;
+
+	while(s_auto.getTop())
+		b_auto.insert(s_auto.pop());
+
+	while(s_moto.getTop())
+		b_moto.insert(s_moto.pop());
+
+	while(s_barca.getTop())
+		b_barca.insert(s_barca.pop());
 	
-	//punto 4
-	//cout << bst_a << endl;
-	//cout << bst_m << endl;
-	//cout << bst_b << endl;
-	int c=1000;
-	//cout << "Inserire una cilindrata: " << endl;
-	bst_a.remove_below(c);
-	bst_m.remove_below(c);
-	bst_b.remove_below(c);
+	cout << "\nBst di oggetti di tipo Auto" << endl;
+	b_auto.inOrder();
+	cout << "------------------------------------------------------" << endl;
+	cout << "\nBst di oggetti di tipo Moto" << endl;
+	b_moto.inOrder();
+	cout << "------------------------------------------------------" << endl;
+	cout << "\nBst di oggetti di tipo Barca" << endl;
+	b_barca.inOrder();
+	cout << "------------------------------------------------------" << endl;
+
+	int val;
+	bool okay = false;
+	do{
+		cout << "\nInserisci un valore di cilindrata (si consiglia un valore inferiore a 4900)" << endl;
+		cin >> val;
+
+		if(cin.fail() || val >= 4900){	
+			cerr << "Errore nell'inserimento di val!" << endl;
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');	
+		}else
+			okay = true;
+	}while(!okay);
+
+	b_auto.remove_below(val);
+	b_moto.remove_below(val);
+	b_barca.remove_below(val);
+
+	cout << "\nBst di oggetti di tipo Auto dopo la rimozione: " << endl;
+	b_auto.inOrder();
+	cout << "------------------------------------------------------" << endl;
+	cout << "\nBst di oggetti di tipo Moto dopo la rimozione: " << endl;
+	b_moto.inOrder();
+	cout << "------------------------------------------------------" << endl;
+	cout << "\nBst di oggetti di tipo Barca dopo la rimozione: " << endl;
+	b_barca.inOrder();
+	cout << "------------------------------------------------------" << endl;
+
 }

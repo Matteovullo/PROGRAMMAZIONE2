@@ -3,109 +3,89 @@
 using namespace std;
 
 #include "Static_stack.h"
-#include "BST.h"
+#include "bst.h"
+#include "Veicolo.h"
 
-class Veicolo{
-	protected:
-		int cavalli;
-		
-	public:
-		Veicolo(double cavalli) : cavalli(cavalli){}
-		virtual int getCilindrata()=0;
-		virtual ostream& put(ostream& os){
-			os << "Class=" << typeid(*this).name() << ", cilindrata = " << cavalli << endl;
-			return os;
-		}
-};
 
-ostream& operator<<(ostream& os, Veicolo& obj){
-	return obj.put(os);
-}
-
-class Auto : public Veicolo{
-	public:
-		Auto(double cilindrata) : Veicolo(cilindrata){}
-		int getCilindrata(){return cavalli;}
-		ostream& put(ostream& os){
-			Veicolo::put(os);
-			return os;
-		}
-};
-
-class Moto : public Veicolo{
-	public:
-		Moto(double cilindrata) : Veicolo(cilindrata){}
-		int getCilindrata(){return cavalli;}
-		ostream& put(ostream& os){
-			Veicolo::put(os);
-			return os;
-		}
-};
-
-class Barca : public Veicolo{
-	public:
-		Barca(double cilindrata) : Veicolo(cilindrata){}	
-		int getCilindrata(){return cavalli;}
-		ostream& put(ostream& os){
-			Veicolo::put(os);
-			return os;
-		}
-};
 
 int main(){
-	//punto 1
-	int n=100;
-	Veicolo** array=new Veicolo*[n];
-	for(int i=0; i<n; i++){
-        int r=rand()%(3)+1;
-		if(r == 1){
-			array[i]=new Auto(rand()%(45-9+1)+9);
-		}
-		if(r == 2){
-			array[i]=new Moto(rand()%(55-20+1)+20);
-		}
-		if(r == 1){
-			array[i]=new Barca(rand()%(50-1+1)+1);
+
+	int N = 500;
+	StaticStack<Veicolo*> s_auto(N);
+	StaticStack<Veicolo*> s_moto(N);
+	StaticStack<Veicolo*> s_barca(N);
+
+	ifstream is("Veicoli.txt");
+	string type = "";
+	string cilindrata = "";
+	Veicolo* v;
+	for(int i=0; i<N; i++){
+		int r=rand()%(3-1+1)+1;
+		if(r==1){
+			v = new Auto(rand()%(45-9+1)+1);
+			s_auto.push(v);
+		}if(r==2){
+			v = new Moto(rand()%(55-20+1)+1);
+			s_moto.push(v);
+		}if(r==3){
+			v = new Barca(rand()%(50-1+1)+1);
+			s_barca.push(v);
 		}
 	}
 
-	for(int i=0; i<n; i++){
-		cout << array[i] << endl;
-	}
+	cout << "Stack di oggetti di tipo Auto" << s_auto << endl;
+	cout << "Stack di oggetti di tipo Moto" << s_moto << endl;
+	cout << "Stack di oggetti di tipo Barca" << s_barca << endl;
+
+	BST<Veicolo*> b_auto;
+	BST<Veicolo*> b_moto;
+	BST<Veicolo*> b_barca;
+
+	while(s_auto.getTop())
+		b_auto.insert(s_auto.pop());
+
+	while(s_moto.getTop())
+		b_moto.insert(s_moto.pop());
+
+	while(s_barca.getTop())
+		b_barca.insert(s_barca.pop());
 	
-	//punto 2
-	StaticStack<Auto*> a(1000);
-	StaticStack<Moto*> m(1000);
-	StaticStack<Barca*> b(1000);
-	for(int i=0; i<n; i++){
-		if(typeid(*array[i])==typeid(Auto)) a.push(dynamic_cast<Auto*>(array[i]));
-		if(typeid(*array[i])==typeid(Moto)) m.push(dynamic_cast<Moto*>(array[i]));
-		if(typeid(*array[i])==typeid(Barca)) b.push(dynamic_cast<Barca*>(array[i]));
-	}
-	cout << a << endl;
-	cout << m << endl;
-	cout << b << endl;
-	
-	//punto 3
-	BST<Auto*> bst_a;
-	BST<Moto*> bst_m;
-	BST<Barca*> bst_b;
-	for(int i=0; i<n; i++){
-		if(typeid(*array[i])==typeid(Auto)) bst_a.insert(dynamic_cast<Auto*>(array[i]));
-		if(typeid(*array[i])==typeid(Moto)) bst_m.insert(dynamic_cast<Moto*>(array[i]));
-		if(typeid(*array[i])==typeid(Barca)) bst_b.insert(dynamic_cast<Barca*>(array[i]));
-	}
-	cout << bst_a << endl;
-	cout << bst_m << endl;
-	cout << bst_b << endl;
-	
-	//punto 4
-	//cout << bst_a << endl;
-	//cout << bst_m << endl;
-	//cout << bst_b << endl;
-	int c=2000;
-	//cout << "Inserire una cilindrata: " << endl;
-	//bst_a.remove_below(c);
-	//bst_m.remove_below(c);
-	//bst_b.remove_below(c);
+	cout << "\nBst di oggetti di tipo Auto" << endl;
+	b_auto.inOrder();
+	cout << "------------------------------------------------------" << endl;
+	cout << "\nBst di oggetti di tipo Moto" << endl;
+	b_moto.inOrder();
+	cout << "------------------------------------------------------" << endl;
+	cout << "\nBst di oggetti di tipo Barca" << endl;
+	b_barca.inOrder();
+	cout << "------------------------------------------------------" << endl;
+
+	/*int val;
+	bool okay = false;
+	do{
+		cout << "\nInserisci un valore di cilindrata: " << endl;
+		cin >> val;
+
+		if(cin.fail()){
+			cerr << "Errore nell'inserimento di val!" << endl;
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');	
+		}else
+			okay = true;
+	}while(!okay);*/
+	int val = 30;
+	b_auto.remove_below(val);
+	b_moto.remove_below(val);
+	b_barca.remove_below(val);
+
+	cout << "\nBst di oggetti di tipo Auto" << endl;
+	b_auto.inOrder();
+	cout << "------------------------------------------------------" << endl;
+	cout << "\nBst di oggetti di tipo Moto" << endl;
+	b_moto.inOrder();
+	cout << "------------------------------------------------------" << endl;
+	cout << "\nBst di oggetti di tipo Barca" << endl;
+	b_barca.inOrder();
+	cout << "------------------------------------------------------" << endl;
+
 }

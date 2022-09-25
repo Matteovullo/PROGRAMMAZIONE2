@@ -17,7 +17,7 @@ class StaticStack {
 		
 		T getTop() {
 			if(isEmpty()) 
-				return -1;
+				return NULL;
 			
 			return array[top];
 		}
@@ -40,14 +40,12 @@ class StaticStack {
 			return top == -1;
 		}
 		
-		friend std::ostream& operator<<(std::ostream& out, StaticStack<T>& s) {
-			out << "Static Stack: maxSize= " << s.maxSize << std::endl;
-			out << "-----" << std::endl;
-			for(int i=s.top; i >= 0; i--)
-				out << s.array[i] << " - ";
-			out << std::endl;
-			
-			return out;
+		friend ostream& operator<<(ostream& out, StaticStack<T>& s) {
+			out << "\nTop->\t" << *s.getTop();
+			for(int i=s.top-1; i>=0; i--)
+				out << "\t" << *s.array[i];
+			return out << "------------------------------------------------------" << endl;
+
 		}
 };
 
